@@ -345,8 +345,6 @@ static cairo_surface_t *draw_clawd(void)
 	enum { COLS = 16, ROWS = 5, UNIT = 5 };
 	cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, ICON_PX, ICON_PX);
 	cairo_t *cr = cairo_create(s);
-	set_rgb(cr, COL_COVER_BG);
-	cairo_paint(cr);
 	int x0 = (ICON_PX - COLS * UNIT) / 2, y0 = (ICON_PX - ROWS * 2 * UNIT) / 2;
 	for (int y = 0; y < ROWS; y++)
 		for (int x = 0; rows[y][x]; x++)
