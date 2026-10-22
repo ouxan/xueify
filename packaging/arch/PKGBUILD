@@ -1,6 +1,6 @@
 # Maintainer: ouxan <155918671+ouxan@users.noreply.github.com>
 pkgname=xueify
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 pkgdesc='Lightweight notification daemon for Wayland compositors with wlr-layer-shell'
 arch=('x86_64' 'aarch64')

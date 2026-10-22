@@ -4,7 +4,7 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.2.0] - 2026-10-23
 
 ### Added
 - `ICON_RULES` in `src/xueify.h` replace the sender's icon by app name or summary
@@ -27,4 +27,5 @@ All notable changes to this project are documented here. The format follows
 - HiDPI rendering through `wl_surface.preferred_buffer_scale`.
 - systemd user unit, D-Bus activation file, man page and Arch Linux PKGBUILD.
 
+[0.2.0]: https://github.com/ouxan/xueify/releases/tag/v0.2.0
 [0.1.0]: https://github.com/ouxan/xueify/releases/tag/v0.1.0
