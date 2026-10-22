@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <systemd/sd-bus.h>
 #include <time.h>
 
@@ -97,6 +98,18 @@ static int read_hints(sd_bus_message *m, struct notif *n, char **image_path)
 	return sd_bus_message_exit_container(m);
 }
 
+static const struct { const char *prefix, *icon; } icon_rules[] = ICON_RULES;
+
+static cairo_surface_t *rule_icon(const char *app, const char *summary)
+{
+	for (size_t i = 0; i < sizeof icon_rules / sizeof *icon_rules; i++) {
+		size_t len = strlen(icon_rules[i].prefix);
+		if (!strncasecmp(app, icon_rules[i].prefix, len) || !strncasecmp(summary, icon_rules[i].prefix, len))
+			return render_icon_lookup(icon_rules[i].icon);
+	}
+	return NULL;
+}
+
 static int method_notify(sd_bus_message *m, void *data, sd_bus_error *error)
 {
 	(void)data; (void)error;
@@ -135,9 +148,11 @@ static int method_notify(sd_bus_message *m, void *data, sd_bus_error *error)
 	else
 		n->timeout = timeout < 0 ? DEFAULT_TIMEOUT : timeout;
 
-	// Precedence from the spec: image-data, image-path, app_icon
+	// Precedence from the spec: image-data, image-path, app_icon; ICON_RULES go before app_icon
 	if (!n->icon && image_path && *image_path)
 		n->icon = render_icon_lookup(image_path);
+	if (!n->icon)
+		n->icon = rule_icon(app, summary);
 	if (!n->icon && *icon)
 		n->icon = render_icon_lookup(icon);
 	free(image_path);

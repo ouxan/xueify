@@ -30,6 +30,7 @@
 #define COL_TITLE    0xf2f2f5
 #define COL_BODY     0x9a9aa5
 #define COL_ACCENT   0x7c5cff
+#define COL_CLAUDE   0xd97757
 
 #define FONT         "Adwaita Sans"
 #define TITLE_PX     14
@@ -38,6 +39,13 @@
 #define STACK_GAP       8
 #define MAX_VISIBLE     5
 #define DEFAULT_TIMEOUT 5000
+
+// Icon overrides: when the app name or the summary starts with the prefix
+// (any case), this icon replaces the sender's app_icon; real images win.
+// An icon is a path, a themed icon name or a built-in drawing such as "@clawd"
+#define ICON_RULES { \
+	{ "claude", "@clawd" }, \
+}
 
 enum close_reason { CLOSE_EXPIRED = 1, CLOSE_DISMISSED = 2, CLOSE_CALLED = 3, CLOSE_UNDEFINED = 4 };
 

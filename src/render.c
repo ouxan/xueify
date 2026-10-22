@@ -331,9 +331,39 @@ static cairo_surface_t *icon_from_file(const char *path)
 	return s;
 }
 
-// A path, a file:// URI or an icon name; PNGs are tried first since SVGs load librsvg
+// Claude Code's mascot, decoded from the quadrant blocks of its terminal logo.
+// Each cell is a quadrant: twice as tall as it is wide, like in a terminal
+static cairo_surface_t *draw_clawd(void)
+{
+	static const char *rows[] = {
+		"..############.",
+		"..##.######.##.",
+		"################",
+		"..############",
+		"...#.#....#.#",
+	};
+	enum { COLS = 16, ROWS = 5, UNIT = 5 };
+	cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, ICON_PX, ICON_PX);
+	cairo_t *cr = cairo_create(s);
+	set_rgb(cr, COL_COVER_BG);
+	cairo_paint(cr);
+	int x0 = (ICON_PX - COLS * UNIT) / 2, y0 = (ICON_PX - ROWS * 2 * UNIT) / 2;
+	for (int y = 0; y < ROWS; y++)
+		for (int x = 0; rows[y][x]; x++)
+			if (rows[y][x] == '#')
+				cairo_rectangle(cr, x0 + x * UNIT, y0 + y * 2 * UNIT, UNIT, 2 * UNIT);
+	set_rgb(cr, COL_CLAUDE);
+	cairo_fill(cr);
+	cairo_destroy(cr);
+	return s;
+}
+
+// A path, a file:// URI, an icon name or a built-in drawing ("@clawd");
+// PNGs are tried first since SVGs load librsvg
 cairo_surface_t *render_icon_lookup(const char *name)
 {
+	if (!strcmp(name, "@clawd"))
+		return draw_clawd();
 	if (!strncmp(name, "file://", 7))
 		name += 7;
 	if (name[0] == '/')

@@ -143,6 +143,13 @@ xueify has no configuration file. Size, spacing, colours, font, timeout and the
 number of visible cards are compile-time constants at the top of
 [`src/xueify.h`](src/xueify.h). Edit them and run `make install` again.
 
+`ICON_RULES` in the same file swaps the sender's icon when the app name or the
+summary starts with a given prefix. The replacement can be a file path, a themed
+icon name or a built-in drawing. Images sent with the notification still take
+precedence. The default rule draws Claude Code's pixel mascot (`@clawd`) for
+notifications from Claude Code, which usually arrive through the terminal with
+the terminal's own icon.
+
 `make preview` renders sample cards with the real drawing code into
 `docs/preview.png`, so you can check a change without sending notifications.
 
