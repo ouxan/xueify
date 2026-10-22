@@ -1,0 +1,25 @@
+# Maintainer: ouxan <155918671+ouxan@users.noreply.github.com>
+pkgname=xueify
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Lightweight notification daemon for Wayland compositors with wlr-layer-shell'
+arch=('x86_64' 'aarch64')
+url='https://github.com/ouxan/xueify'
+license=('MIT')
+depends=('wayland' 'cairo' 'pango' 'gdk-pixbuf2' 'glib2' 'systemd-libs')
+makedepends=('git' 'wayland-protocols' 'wlr-protocols')
+optdepends=('librsvg: SVG application icons'
+            'adwaita-fonts: the default card font')
+provides=('notification-daemon')
+source=("git+$url.git#tag=v$pkgver")
+sha256sums=('SKIP')
+
+build() {
+  cd "$pkgname"
+  make PREFIX=/usr
+}
+
+package() {
+  cd "$pkgname"
+  make PREFIX=/usr DESTDIR="$pkgdir" install
+}

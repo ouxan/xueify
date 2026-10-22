@@ -1,0 +1,70 @@
+.TH XUEIFY 1 2026-10-23 "xueify @VERSION@" "User Commands"
+.SH NAME
+xueify \- lightweight notification daemon for Wayland
+.SH SYNOPSIS
+.B xueify
+.RB [ \-h | \-\-help ]
+.RB [ \-v | \-\-version ]
+.SH DESCRIPTION
+.B xueify
+implements the freedesktop.org Desktop Notifications specification and shows
+each notification as a rounded card in the bottom-right corner of the screen,
+drawn on a wlr-layer-shell surface. It needs a compositor that supports
+.B zwlr_layer_shell_v1
+(Hyprland, Sway, river, niri, labwc and others).
+.PP
+While no notification is on screen the daemon sleeps in
+.BR poll (2)
+and holds no buffers or timers.
+.SH BEHAVIOUR
+.TP
+.B Timeouts
+Notifications close after the timeout requested by the sender, or after 5 seconds
+when the sender leaves it to the server. Critical notifications stay until dismissed.
+Hovering a card pauses its timeout; leaving restarts it.
+.TP
+.B Stacking
+Up to five cards are shown, newest at the bottom; the rest wait in a queue.
+.TP
+.B Replacing
+A notification that names an existing id in
+.I replaces_id
+or shares an
+.I x-canonical-private-synchronous
+(or
+.IR x-dunst-stack-tag )
+hint is updated in place.
+.TP
+.B Images
+.IR image-data ,
+.I image-path
+and
+.I app_icon
+are honoured in that order and cropped to a square cover.
+.SH MOUSE
+.TP
+.B Left click
+Invokes the
+.I default
+action, if the sender offered one, and closes the card.
+.TP
+.B Right click
+Closes the card.
+.TP
+.B Middle click
+Closes every card, including queued ones.
+.SH FILES
+.TP
+.I @DATADIR@/dbus-1/services/org.freedesktop.Notifications.service
+D-Bus activation file.
+.TP
+.I xueify.service
+systemd user unit that runs the daemon.
+.SH EXIT STATUS
+0 when the compositor goes away, 1 when the session bus or the compositor cannot
+be used or another daemon already owns
+.BR org.freedesktop.Notifications .
+.SH SEE ALSO
+.BR notify-send (1)
+.PP
+https://github.com/ouxan/xueify

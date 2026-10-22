@@ -1,0 +1,28 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: |
+          pacman -Syu --noconfirm --needed base-devel git wayland wayland-protocols \
+            wlr-protocols cairo pango gdk-pixbuf2 systemd-libs ttf-dejavu
+      - uses: actions/checkout@v4
+      - name: Build
+        env:
+          CFLAGS: -O2 -Werror
+        run: make
+      - name: Smoke test
+        run: |
+          ./xueify --version
+          make preview
+      - name: Staged install
+        run: |
+          make PREFIX=/usr DESTDIR="$PWD/stage" install
+          find stage -type f | sort
